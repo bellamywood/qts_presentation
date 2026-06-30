@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="author" content="TBellamy-Wood SCITT">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QTS Evidence Portfolio | Tyrone Bellamy-Wood</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7ab536;
+      --charcoal: #3c4147;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.4);
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      --text: #1a1a1a;
+      --text-muted: #4a4a4a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2664&auto=format&fit=crop') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Fixed overlay to soften background */
+    .bg-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(135deg, rgba(60, 65, 71, 0.6) 0%, rgba(122, 181, 54, 0.3) 100%);
+      z-index: -1;
+    }
+
+    header {
+      background: rgba(60, 65, 71, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 3px solid var(--primary);
+      box-shadow: var(--glass-shadow);
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: white;
+      text-decoration: none;
+    }
+    .brand svg { width: 40px; }
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .brand-title span {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.8rem;
+      color: #cdd1d6;
+      text-transform: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding: 3rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+    
+    .hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3rem;
+      color: var(--charcoal);
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .standard-section {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      margin-bottom: 3rem;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .standard-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+    .standard-header {
+      background: var(--charcoal);
+      color: white;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .standard-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+    }
+    .standard-desc {
+      font-size: 0.95rem;
+      color: #cdd1d6;
+      font-style: italic;
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .evidence-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+    }
+    .evidence-card:hover {
+      transform: scale(1.02);
+    }
+    
+    .evidence-label {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+
+    .evidence-text {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    
+    .evidence-gallery {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .evidence-gallery a {
+      display: block;
+      width: 60px;
+      height: 45px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid rgba(122, 181, 54, 0.3);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .evidence-gallery a:hover {
+      transform: scale(1.1);
+      border-color: #7ab536;
+      z-index: 10;
+    }
+    .evidence-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+
+    .pedagogy-callout {
+      margin: 0 2rem 2rem 2rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(122, 181, 54, 0.15) 0%, rgba(122, 181, 54, 0.05) 100%);
+      border-radius: 12px;
+      border: 1px solid rgba(122, 181, 54, 0.3);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .pedagogy-icon {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+    .pedagogy-content h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      margin-bottom: 0.3rem;
+    }
+    .pedagogy-content p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: white;
+      font-size: 0.9rem;
+      background: var(--charcoal);
+      border-top: 4px solid var(--primary);
+    }
+    .triumph-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 2rem;
+    }
+    .triumph-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--primary);
+    }
+    @media (min-width: 768px) {
+      .triumph-card { flex-direction: row; }
+    }
+    .triumph-img {
+      flex: 0 0 300px;
+      background-size: cover;
+      background-position: center;
+      min-height: 200px;
+    }
+    .triumph-content {
+      padding: 1.5rem;
+      flex: 1;
+    }
+    .triumph-content h3 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--charcoal);
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+    .triumph-content p, .triumph-content li {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-overlay"></div>
+
+  <header>
+    <a class="brand" href="#">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="2.5"/>
+        <polygon points="30,14 44,22 44,38 30,46 16,38 16,22" fill="#7ab536" opacity="0.25"/>
+        <polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536" opacity="0.55"/>
+        <polygon points="30,26 36,30 36,38 30,42 24,38 24,30" fill="#7ab536"/>
+      </svg>
+      <div class="brand-title">
+        Mr Tyrone Bellamy-Wood
+        <span>QTS Interactive Evidence Portfolio</span>
+      </div>
+    </a>
+  </header>
+
+  <div class="container">
+    <div class="hero">
+      <h1>QTS Evidence Portfolio</h1>
+      <p>A curated collection of practical classroom evidence and pedagogical reflections mapped directly to the Teachers' Standards. Prepared for Nova Torch SCITT.</p>
+    </div>
+
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Context & Introduction</h2>
+        <div class="standard-desc">Setting the scene for the 2025-2026 SCITT Year.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">The Cohort & Demographics</div>
+          <div class="evidence-text">Taught Computing across Year 7 through Year 12. Managed diverse classrooms including mixed ability groups, distinct A/B bands, SEND pupils, and EAL learners, adapting practice to meet widely varying needs.</div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">The Evidence Base</div>
+          <div class="evidence-text">Completed an exhaustive 23 full Directed Learning and Development (DLD) cycles, continuously demonstrating a loop of taking feedback, acting on it, and reviewing the impact on pupil progress.</div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">The Reality (Resilience)</div>
+          <div class="evidence-text">Navigated this intense workload alongside unprecedented personal turbulence - including a career transition, housing crisis, and wedding - coupled with a gruelling 4-hour daily commute and a painful knee condition.</div>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 1 - High Expectations</h2>
+        <div class="standard-desc">Set high expectations which inspire, motivate, challenge pupils.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (Observations/Reflections)</div>
+          <div class="evidence-text">DLD Cycle 22 (Computing Revision). Identified the need to establish consequences early rather than relying solely on rapport. This ensured high behavioral expectations were met and maintained lesson pace.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle22_FB_Consequences.png" target="_blank"><img src="media_evidence/DLDCycle22_FB_Consequences.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Planning/Assessment)</div>
+          <div class="evidence-text">DLD Cycle 19 (MakeCode Arcade). Designed "hard mode" and multiple coding paths (e.g., monster truck coding) to push higher prior attainers, preventing "more of the same" busywork.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle19_Lesson_Hard1.png" target="_blank"><img src="media_evidence/DLDCycle19_Lesson_Hard1.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (Professional Engagement)</div>
+          <div class="evidence-text">DLD Cycle 20 (Cyber Security). Challenged Year 9 pupils to justify their decisions in cyber scenarios rather than passively accepting answers. Prompted them to think critically about "black hat" vs "white hat" roles.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle20_Lesson_Hats.png" target="_blank"><img src="media_evidence/DLDCycle20_Lesson_Hats.png" alt="Evidence"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>I've learned that high expectations aren't just about behavior, but about cognitive challenge. Drawing on the <strong>Pygmalion Effect (Rosenthal & Jacobson, 1968)</strong> - which shows that higher expectations lead to an increase in performance - I provided multiple coding paths in MakeCode to keep high attainers stretched. Simultaneously, I learned to lean on the school's consequence system early to maintain a safe, predictable learning environment.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 2 - Promote Good Progress</h2>
+        <div class="standard-desc">Promote good progress and outcomes by pupils.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (Classroom Practice)</div>
+          <div class="evidence-text">DLD Cycle 18 (Graphite). Shifted from direct instruction to structured 'Teach-Check-Practice' cycles, allowing students to check their vector designs iteratively.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle18_Lesson_TCP.png" target="_blank"><img src="media_evidence/DLDCycle18_Lesson_TCP.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Subject Knowledge/Planning)</div>
+          <div class="evidence-text">DLD Cycle 23 (Pathfinding Algorithms). Moved away from front-loaded theory to interactive checking tools for Year 12s, which actively progressed the lesson based on their grasp of the heuristic learning pit.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle23_LP_checking.png" target="_blank"><img src="media_evidence/DLDCycle23_LP_checking.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (Assessment Data)</div>
+          <div class="evidence-text">DLD Cycle 21 (Classfolio Retrieval). Used live Classfolio retrieval data to consolidate Year 8 knowledge across the term, ensuring gaps were closed before moving forward.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle21_Lesson_Retrieval.png" target="_blank"><img src="media_evidence/DLDCycle21_Lesson_Retrieval.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 4 (Live Assessment & Moderation)</div>
+          <div class="evidence-text"><strong>Classfolio Results.</strong> What the data shows: 26 assessment runs across 20 classes, auto-marked then moderated and reviewed (Years 7 to 10), including a Year 8 end-of-topic with 29 pupils and 522 responses. Teaching decision: I moderate the automated marks before release and compare classes (e.g. 8A2 against 8b3) to pinpoint where a cohort needs reteaching.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/marking_evidence3.png" target="_blank"><img src="media_evidence/marking_evidence3.png" alt="Classfolio results, marking and moderation"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 5 (Live Pupil Folios)</div>
+          <div class="evidence-text"><strong>Student Folios dashboard.</strong> What the data shows: 9 pupil folios holding 123 evidence items across 32 classes, each one building automatically from pupil input and flagged when it needs review. Teaching decision: I work through flagged folios and write feedback and targets straight into each pupil's book.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/marking_evidence2.png" target="_blank"><img src="media_evidence/marking_evidence2.png" alt="Student folios dashboard"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 6 (Per-Pupil Data & Targets)</div>
+          <div class="evidence-text"><strong>Individual folio (9B4, Cyber Security).</strong> What the data shows: a Drag and Drop task auto-marked 4/4, part of a folio built from 5 lessons and 18 responses. Teaching decision: off the back of the data I set this pupil's targets, "Complete revision task 3" and "Explain your reasoning in more detail".</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/marking_evidence1.png" target="_blank"><img src="media_evidence/marking_evidence1.png" alt="Individual pupil folio with auto-marking and targets"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>Progress relies on checking understanding constantly. Influenced by <strong>Roediger & Karpicke's (2006)</strong> research on the 'testing effect' and retrieval practice, I used Teach-Check-Practice cycles in Graphite and leveraged Classfolio for live retrieval. This meant I could adapt the pace of the lesson based on actual data rather than assumptions. I also marked nine Year 12 mock papers, moderating my judgements against the mark scheme with the class teacher to build an accurate picture of where pupils were and what to reteach.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 3 - Subject and Curriculum Knowledge</h2>
+        <div class="standard-desc">Demonstrate good subject and curriculum knowledge.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (Planning)</div>
+          <div class="evidence-text">DLD Cycle 23. Independently designed and coded bespoke "vibe-coded" interactive webpages to teach complex pathfinding algorithms to Year 12 students.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/yr12_workshop_evidence.png" target="_blank"><img src="media_evidence/yr12_workshop_evidence.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Professional Engagement)</div>
+          <div class="evidence-text">Course Development Log. Engaged in self-guided revision of the H446 OCR CS specification and OOP principles in Python to confidently deliver KS5 content.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/OCR_spec_revision.png" target="_blank"><img src="media_evidence/OCR_spec_revision.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (CPD)</div>
+          <div class="evidence-text">Course Development Log. Completed STEM Learning modules (CO206B24/CO214B24) to deepen knowledge of Von Neumann architecture, network protocols, and cybersecurity.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/Stem_learning.png" target="_blank"><img src="media_evidence/Stem_learning.png" alt="Evidence"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>To teach effectively, my own knowledge must be bulletproof. I engaged heavily with STEM learning courses to master networking and architecture, and built custom interactive web apps to model complex A-Level pathfinding algorithms.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 4 - Classroom Practice</h2>
+        <div class="standard-desc">Plan and teach well structured lessons.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (Classroom Practice)</div>
+          <div class="evidence-text">DLD Cycle 21. Seamlessly integrated the Classfolio platform into lessons, creating structured, fast-paced transitions between multiple short retrieval activities.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle21_LP_transition.png" target="_blank"><img src="media_evidence/DLDCycle21_LP_transition.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Observations)</div>
+          <div class="evidence-text">DLD Cycle 19. Transitioned to a structured "I do, We do, You do" modelling approach when teaching new coding concepts, significantly reducing cognitive overload.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle19_FB_model.png" target="_blank"><img src="media_evidence/DLDCycle19_FB_model.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (Reflections)</div>
+          <div class="evidence-text">DLD Cycles 10 & 11. Used planned hinge questions to script vocabulary and pivot lessons based on real-time understanding.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle10_LP_hinge.png" target="_blank"><img src="media_evidence/DLDCycle10_LP_hinge.png" alt="Evidence"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>Structure is everything. Guided by <strong>Rosenshine's Principles of Instruction (2012)</strong>, specifically around sequencing concepts and modelling, I moved from assuming knowledge to explicit 'I do, We do, You do' modelling. Deploying platforms like Classfolio allowed me to structure transitions tightly and use hinge questions to pivot when needed.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 5 - Adapt Teaching</h2>
+        <div class="standard-desc">Adapt teaching to respond to the strengths and needs of all pupils.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (SEND Support)</div>
+          <div class="evidence-text">DLD Cycle 20. Implemented "mini-wedo" physical keyboard scaffolding (guiding hands on the keyboard) for SEND pupils struggling with typing literacy.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle20_Lesson_wedo.png" target="_blank"><img src="media_evidence/DLDCycle20_Lesson_wedo.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Differentiation)</div>
+          <div class="evidence-text">DLD Cycle 18. Reflected on the differences between A-band and B-band groups, realizing B-band required more staggered "We do" handovers and smaller chunked steps for vector design.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle18_LP_differentiation.png" target="_blank"><img src="media_evidence/DLDCycle18_LP_differentiation.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (EAL Support)</div>
+          <div class="evidence-text">DLD Cycle 19. Adapted delivery by reading instructions out loud and summarizing visually for EAL pupils, lowering the barrier to entry for coding tasks.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/EAL_EvidenceforAssessment.png" target="_blank"><img src="media_evidence/EAL_EvidenceforAssessment.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 4 (Whole-Class Inclusive Planning)</div>
+          <div class="evidence-text"><strong>Inclusive Planning Grid (all classes).</strong> What it shows: a per-class grid mapping each pupil's area of need, across SEND (dyslexia, dyscalculia, dyspraxia, dysgraphia, Down Syndrome) and physical or sensory needs, to specific strategies, with those effective for EAL learners flagged. Teaching decision: adaptation is planned in advance per class and tied to the seating plan, so SEND and EAL needs are met systematically rather than reactively.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/inclusion_planning_evidence.png" target="_blank"><img src="media_evidence/inclusion_planning_evidence.png" alt="Inclusive planning grid"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>A 'one size fits all' approach doesn't work. Applying <strong>Sweller's (1988) Cognitive Load Theory</strong>, I adapted my Graphite lesson entirely for a B-band group by staggering the handovers to reduce intrinsic load. For SEND pupils lacking typing literacy, I used physical 'mini-wedo' scaffolding to build their confidence without overloading their working memory.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 6 - Assessment</h2>
+        <div class="standard-desc">Make accurate and productive use of assessment.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (Live AfL)</div>
+          <div class="evidence-text">DLD Cycle 22. Used live Classfolio assessment data to enforce an 80% class accuracy threshold before allowing the lesson to proceed. <em>What the data shows:</em> after targeted reteaching of PSD vs JPEG, class knowledge rose toward the 80% gate - the screenshot is the decision point, not just a dashboard.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle22_Lesson_80pc.png" target="_blank"><img src="media_evidence/DLDCycle22_Lesson_80pc.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Questioning)</div>
+          <div class="evidence-text">DLD Cycle 17. Reflected on the danger of asking "Is everyone ok with this?" and shifted to targeted, probing questions on network terminology to expose hidden misconceptions.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle17_FB_questioning.png" target="_blank"><img src="media_evidence/DLDCycle17_FB_questioning.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (Formative Strategies)</div>
+          <div class="evidence-text">Course Development Log. Integrated gamified formative assessments like "spot the CARP" and "match the tool" into plenaries to assess KS3 design principles effectively.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/Gamified_plenary.png" target="_blank"><img src="media_evidence/Gamified_plenary.png" alt="Evidence"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>I learned early on that asking 'Does everyone understand?' is a trap. Grounding my approach in <strong>Wiliam & Black's (1998) 'Inside the Black Box'</strong> on formative assessment, I replaced this with targeted questioning and strict 80% accuracy thresholds on Classfolio before moving on.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 7 - Managing Behaviour</h2>
+        <div class="standard-desc">Manage behaviour effectively to ensure a good and safe learning environment.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (Reflections)</div>
+          <div class="evidence-text">DLD Cycle 22. Addressed personal bias regarding positive rapport; committed to using the consequence system earlier to prevent behavior from slipping during independent tasks.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle22_FB_Consequences.png" target="_blank"><img src="media_evidence/DLDCycle22_FB_Consequences.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Routines)</div>
+          <div class="evidence-text">DLD Cycle 19. Implemented strict visual timers and cut-off points to ensure transitions were crisp and didn't bleed into off-task chatting.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle19_Lesson_Timer.jpeg" target="_blank"><img src="media_evidence/DLDCycle19_Lesson_Timer.jpeg" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (Classroom Management)</div>
+          <div class="evidence-text">DLD Cycle 12. Actively managed student behavior during plenaries by ensuring the "turn and face the board" routine was established and enforced before speaking.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle12_FB_turnfaceboard.png" target="_blank"><img src="media_evidence/DLDCycle12_FB_turnfaceboard.png" alt="Evidence"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>A safe environment requires consistency. Reflecting on <strong>Bill Rogers'</strong> behavior management strategies regarding the establishment of routines and positive correction, I realized I couldn't rely purely on my rapport with students - I needed to use the school's consequence system early and stick to strict timers to maintain a focused learning environment.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Standard 8 - Fulfil Wider Professional Responsibilities</h2>
+        <div class="standard-desc">Make a positive contribution to the wider life and ethos of the school.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1 (Professional Engagement)</div>
+          <div class="evidence-text">Course Development Log. Attended the MV16 Away Day to understand the transition to KS5 study and align teaching practices with sixth-form expectations.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/MeltonVale_notes.png" target="_blank"><img src="media_evidence/MeltonVale_notes.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (CPD/Collaboration)</div>
+          <div class="evidence-text">Course Development Log. Collaborated with a Garibaldi mentor to develop comprehensive Canvas and PhotoPea resources for the department.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/Resource_creation_evidence1.png" target="_blank"><img src="media_evidence/Resource_creation_evidence1.png" alt="Evidence"></a>
+            <a href="media_evidence/Resource_creation_evidence2.png" target="_blank"><img src="media_evidence/Resource_creation_evidence2.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3 (School Community)</div>
+          <div class="evidence-text">Participated in PSHE/PD curriculum training and integrated mental health and safeguarding awareness into ECT preparations.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/PDPSHE_Resource.png" target="_blank"><img src="media_evidence/PDPSHE_Resource.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 4 (Parent Communication)</div>
+          <div class="evidence-text"><strong>Parents' Evening Lookup tool (self-built).</strong> What it shows: a tool pulling each pupil's ATL, assessment percentage and Bebras score and generating a consistent comment set covering attitude to learning, assessment and computational thinking, so feedback to parents is precise and evidence-based. Context: I was asked to cover the majority of Year 7 and Year 8 parents' evening appointments, including registered families and drop-ins, and used this to give specific, data-led feedback rather than generic comments.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/parents_evening_evidence.png" target="_blank"><img src="media_evidence/parents_evening_evidence.png" alt="Parents evening lookup tool"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>Teaching extends beyond the classroom. I collaborated with mentors to build department-wide resources for PhotoPea, attended KS5 transition days at MV16, and engaged deeply in the PSHE curriculum to support pupil wellbeing.</p>
+        </div>
+      </div>
+    </section>
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Part Two - Professional Behaviours</h2>
+        <div class="standard-desc">Uphold public trust and maintain high standards of ethics and behaviour.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 1</div>
+          <div class="evidence-text">Maintained an exhaustive, reflective DLD log (23 full cycles), demonstrating a continuous loop of taking feedback, acting on it, and reviewing the impact.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/AllDLD_Snapshot1.png" target="_blank"><img src="media_evidence/AllDLD_Snapshot1.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 2 (Safeguarding Training)</div>
+          <div class="evidence-text">Completed statutory safeguarding and compliance training - KCSIE 2024 awareness, Prevent (Channel, Referrals and Awareness), FGM recognition, and the full Health &amp; Safety suite.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/EvidenceofCPDCertificates.png" target="_blank"><img src="media_evidence/EvidenceofCPDCertificates.png" alt="CPD and safeguarding certificates"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Evidence 3</div>
+          <div class="evidence-text">Innovated responsibly by leveraging AI (LLMs) to improve resource dissemination and differentiate materials, while balancing workload and wellbeing.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/AI_prompt_evidence.png" target="_blank"><img src="media_evidence/AI_prompt_evidence.png" alt="Evidence"></a>
+          </div>
+        </div>
+      </div>
+      <div class="pedagogy-callout">
+        <div class="pedagogy-icon">💡</div>
+        <div class="pedagogy-content">
+          <h3>Pedagogy in Practice</h3>
+          <p>My professional behavior is rooted in reflection and innovation. Completing 23 DLD cycles has hardwired the reflective process into my teaching. Furthermore, exploring AI tools has allowed me to innovate in how I differentiate resources while maintaining a sustainable workload.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Professional Triumphs & Strengths</h2>
+        <div class="standard-desc">Beyond the Standards: Resilience, Adaptability, and Impact</div>
+      </div>
+      <div class="triumph-grid">
+        
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url(media_evidence/yr12_workshop_evidence.png);"></div>
+          <div class="triumph-content">
+            <h3>Exceptional Subject &amp; Curriculum Knowledge</h3>
+            <p>Mastery of computing consistently highlighted as a major strength by mentors, Heads of Department, and peers in Finland. A unique focus on the real-world application of knowledge through business and personal lenses, backed by formal STEM Learning CPD and independent OCR H446 specification study.</p>
+          </div>
+        </div>
+
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url('https://images.pexels.com/photos/5212361/pexels-photo-5212361.jpeg?auto=compress&cs=tinysrgb&w=600');"></div>
+          <div class="triumph-content">
+            <h3>2. Restoring Pupil Engagement & Trust</h3>
+            <p>Successfully restored fractured relationships between marginalized pupils, their parents, and the school. Worked patiently one-on-one with students who were acting out due to a fear of the subject, helping them rebuild confidence and rediscover a love for learning.</p>
+          </div>
+        </div>
+
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url(media_evidence/Enrichment_blender_evidence.png);"></div>
+          <div class="triumph-content">
+            <h3>Enrichment &amp; Mentoring Clubs</h3>
+            <p><strong>3D Animation Club:</strong> Mentored notoriously quiet students on real-world career paths via Blender.<br>
+            <strong>Origami Club:</strong> Pivoted to supporting Origami when IT was restricted. Replicated a warm, mentoring environment, giving life advice and cementing a place as a trusted, foundational figure in the school.</p>
+          </div>
+        </div>
+
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url(media_evidence/SafeguardingPlacement2_evidence.png);"></div>
+          <div class="triumph-content">
+            <h3>Safeguarding &amp; Pastoral Competence</h3>
+            <p>Successfully managed a complex, escalating pastoral situation involving a Year 11 couple (insulting emails, emotional disclosures, cheating accusations). Maintained strict professional boundaries ("no surprise, no judgment"), meticulously logged on Bromcom, and held a joint intervention that reset the boy's focus, transforming him into a motivated Computer Science student.</p>
+          </div>
+        </div>
+
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url(media_evidence/yr12_workshop_evidence.png);"></div>
+          <div class="triumph-content">
+            <h3>KS5 Assessment &amp; Application</h3>
+            <p>Turned a struggle with making A-Level relatable into a major triumph. Ran mini-revision workshops in the Sixth Form block using AI-generated business scenarios. Taught students to "cross-pollinate" concepts to justify technical decisions, helping them jump from 1-2 mark answers to securing 5-6 marks in long-form questions.</p>
+          </div>
+        </div>
+
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url('https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=600');"></div>
+          <div class="triumph-content">
+            <h3>6. Adaptability Under Pressure (Teaching with "Nothing")</h3>
+            <p><strong>Network Outage:</strong> Taught a complex 3D Blender lesson entirely from memory using just a whiteboard.<br>
+            <strong>Chellaston Interview:</strong> Faced with a broken projector, taught binary and character representation using a half-working whiteboard pen and a mini whiteboard, taking students from zero to top marks (7s) by addressing misconceptions on the fly.</p>
+          </div>
+        </div>
+        
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url('https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg?auto=compress&cs=tinysrgb&w=600');"></div>
+          <div class="triumph-content">
+            <h3>7. Cross-Curricular Agility & Staff Upskilling</h3>
+            <p><strong>Agility:</strong> Taught English in Finland and seamlessly handled a surprise Spanish cover lesson with high pupil scores.<br>
+            <strong>Upskilling:</strong> Taught classroom teachers in Maths and Science how to effectively leverage computer management software to instantly refocus off-task pupils.</p>
+          </div>
+        </div>
+
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url('https://images.pexels.com/photos/3184325/pexels-photo-3184325.jpeg?auto=compress&cs=tinysrgb&w=600');"></div>
+          <div class="triumph-content">
+            <h3>8. Pastoral Impact & Fostering Safe Spaces</h3>
+            <p><strong>The "Lightbulb" Moment:</strong> Stripped complexity in a Fake News lesson ("turn to a friend and ask, 'does this look real?'"), showing a switched-off pupil that CS is accessible.<br>
+            <strong>The Morning Hub:</strong> Transformed the mentor group into a safe haven. A shy Year 8 girl grew comfortable arriving early to code. Now, students from multiple mentor groups gravitate to the room every morning just to hang out and talk.</p>
+          </div>
+        </div>
+
+        <div class="triumph-card">
+          <div class="triumph-img" style="background-image: url(media_evidence/Planner_evidence.png);"></div>
+          <div class="triumph-content">
+            <h3>Resilience &amp; Elite Time Management</h3>
+            <p>Maintained high professional standards while navigating unprecedented turbulence: a career change, housing crisis, wedding, and a 4-hour daily commute while undergoing treatment for a painful knee condition.</p>
+            <p>Navigated complex mentorship (ever-shifting timetables) using quiet diplomacy, drawing on corporate experience to step away and re-establish facts calmly. Guided disorganized leadership on appropriate communication channels, anchoring chaos through elite journaling, multiple digital planners, and smartwatch reminders.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="standard-section">
+      <div class="standard-header">
+        <h2>Appendices: Supplementary Evidence</h2>
+        <div class="standard-desc">Additional documentation, lesson slides, and resources supporting the core standards.</div>
+      </div>
+      <div class="evidence-grid">
+        <div class="evidence-card">
+          <div class="evidence-label">DLD Log Continuation</div>
+          <div class="evidence-text">Further extracts from the comprehensive 23-cycle Directed Learning and Development tracking document.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/AllDLD_Snapshot2.png" target="_blank"><img src="media_evidence/AllDLD_Snapshot2.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Lesson: Hinge Questions</div>
+          <div class="evidence-text">Lesson slides from DLD Cycles 10 & 11 demonstrating the explicit planning of hinge questions to pivot the lesson based on pupil understanding.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle10_Lesson_hinge.png" target="_blank"><img src="media_evidence/DLDCycle10_Lesson_hinge.png" alt="Evidence"></a>
+            <a href="media_evidence/DLDCycle11_Lesson_hinge.png" target="_blank"><img src="media_evidence/DLDCycle11_Lesson_hinge.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Lesson Plan: Hinge Questions</div>
+          <div class="evidence-text">Formal lesson plan extract for DLD Cycle 11 detailing the anticipated misconceptions and pivot points.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle11_LP_hinge.png" target="_blank"><img src="media_evidence/DLDCycle11_LP_hinge.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Lesson: Behaviour Routines</div>
+          <div class="evidence-text">Slide from DLD Cycle 12 explicitly communicating the 'Turn and face the board' routine to establish a safe learning environment.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle12_Lesson_turnfaceboard.png" target="_blank"><img src="media_evidence/DLDCycle12_Lesson_turnfaceboard.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Lesson: Visual Timers & Cut-offs</div>
+          <div class="evidence-text">Slides from DLD Cycle 19 demonstrating the use of clear visual transitions and hard cut-off points to manage pace.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle19_Lesson_Cutoff.png" target="_blank"><img src="media_evidence/DLDCycle19_Lesson_Cutoff.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Lesson: High Attainer Scaffolding</div>
+          <div class="evidence-text">Continuation of 'Hard Mode' tasks from DLD Cycle 19, pushing high-attaining pupils beyond the core lesson objectives.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle19_Lesson_Hard2.png" target="_blank"><img src="media_evidence/DLDCycle19_Lesson_Hard2.png" alt="Evidence"></a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Resource: Pathfinding Video</div>
+          <div class="evidence-text">Video demonstration of the bespoke 'Vibe-coded' pathfinding application built for Year 12s during DLD Cycle 23.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/DLDCycle23_Lesson_vibecode.mp4" target="_blank">
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #eee; color: #7ab536; font-size: 0.7rem; text-align: center; font-weight: bold;">[Video]</div>
+            </a>
+          </div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-label">Unifrog PD Integration</div>
+          <div class="evidence-text">Evidence of incorporating the Unifrog platform into the PSHE/PD curriculum to support student pathways.</div>
+          <div class="evidence-gallery">
+            <a href="media_evidence/PDPSHE_unifrog.png" target="_blank"><img src="media_evidence/PDPSHE_unifrog.png" alt="Evidence"></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>Mr Tyrone Bellamy-Wood · QTS Evidence Portfolio · Nova Torch SCITT</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="author" content="TBellamy-Wood SCITT">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QTS Presentation | Tyrone Bellamy-Wood</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#7ab536; --green-bright:#8cc63f; --charcoal:#3c4147;
+    --ink:#eaedef; --muted:#9aa1a8; --card:rgba(24,27,29,0.62); --card-line:rgba(255,255,255,0.09);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    color:var(--ink); background:#0c0d0e; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Outfit','Inter',system-ui,sans-serif;font-weight:800;letter-spacing:-0.01em;}
+
+  /* ---------- deck / slide engine (works with OR without JS) ---------- */
+  .deck{width:100%;}
+  .slide{
+    position:relative; min-height:100vh; width:100%;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:5.5vh 6vw 7vh; overflow:hidden;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .bg-dark{background:
+     radial-gradient(1100px 620px at 85% 12%, rgba(122,181,54,0.10), transparent 60%),
+     radial-gradient(900px 700px at 8% 96%, rgba(60,65,71,0.55), transparent 60%),
+     linear-gradient(160deg,#0d0f10 0%,#15191b 100%);}
+  .bg-hero{background:
+     radial-gradient(1000px 760px at 50% 44%, rgba(122,181,54,0.14), transparent 62%),
+     linear-gradient(160deg,#0a0c0d 0%,#13171a 100%);}
+  .bg-close{background:
+     radial-gradient(900px 760px at 50% 120%, rgba(122,181,54,0.16), transparent 60%),
+     linear-gradient(160deg,#0a0b0c 0%,#101315 100%);}
+
+  .hexwm{position:absolute;right:-60px;top:50%;transform:translateY(-50%);width:520px;opacity:0.06;pointer-events:none;}
+  .slide .eyebrow{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem;}
+  .slide .eyebrow svg{width:26px;height:26px;}
+  .slide .eyebrow span{font-size:.82rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--green-bright);}
+  .slide h2{font-size:clamp(1.8rem,4.2vw,3rem);color:#fff;line-height:1.05;}
+  .slide .sub{color:var(--muted);font-size:1.05rem;margin-top:.5rem;max-width:60ch;}
+
+  .glass{
+    background:var(--card); border:1px solid var(--card-line); border-radius:18px;
+    padding:1.6rem 1.8rem; box-shadow:0 14px 40px rgba(0,0,0,0.45);
+    backdrop-filter:blur(9px); -webkit-backdrop-filter:blur(9px);
+    max-width:1080px; margin-top:1.4rem;
+  }
+  ul{list-style:none;}
+  .glass li{position:relative;padding-left:1.5rem;margin-bottom:.75rem;font-size:1.06rem;line-height:1.5;color:#dfe3e5;}
+  .glass li::before{content:"";position:absolute;left:0;top:.55em;width:.5rem;height:.5rem;background:var(--green);
+     clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);}
+  .hl{color:var(--green-bright);font-weight:600;}
+  .note{margin-top:1rem;padding:.9rem 1.1rem;border-radius:12px;
+     background:linear-gradient(135deg,rgba(122,181,54,0.16),rgba(122,181,54,0.05));
+     border:1px solid rgba(122,181,54,0.28);font-size:.98rem;color:#e7ebe8;}
+  .note b{color:var(--green-bright);}
+  .descriptor{font-size:.97rem;color:var(--muted);font-style:italic;margin-top:.2rem;margin-bottom:1.1rem;max-width:70ch;}
+
+  .ev-title{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green-bright);margin-top:1.3rem;margin-bottom:.55rem;}
+  .gallery{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .gallery a{display:block;width:92px;height:64px;border-radius:9px;overflow:hidden;border:2px solid rgba(255,255,255,0.16);
+     transition:transform .18s,border-color .18s;}
+  .gallery a:hover{transform:scale(1.12);border-color:var(--green);z-index:5;}
+  .gallery img{width:100%;height:100%;object-fit:cover;display:block;}
+  .doc-chip{display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .85rem;border-radius:9px;
+     background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);color:#dfe3e5;font-size:.82rem;text-decoration:none;width:auto;height:auto;}
+  .doc-chip:hover{border-color:var(--green);color:#fff;transform:none;}
+  .doc-chip svg{width:14px;height:14px;}
+
+  .center{align-items:center;text-align:center;}
+  .center h1{font-size:clamp(2.6rem,7vw,4.6rem);color:#fff;line-height:1;}
+  .center .dates{color:var(--green-bright);letter-spacing:.34em;font-size:1.1rem;margin-top:1.1rem;}
+  .center .who{color:#cdd1d6;margin-top:1.8rem;font-size:1.05rem;line-height:1.7;}
+  .center .who b{color:#fff;}
+  .logo-big{width:130px;margin:0 auto 1.4rem;}
+
+  /* ---------- presentation mode (JS on) ---------- */
+  body.js-on .deck{height:100vh;overflow:hidden;}
+  body.js-on .slide{position:fixed;inset:0;opacity:0;visibility:hidden;transition:opacity .45s ease;}
+  body.js-on .slide.active{opacity:1;visibility:visible;}
+  .controls{display:none;}
+  body.js-on .controls{display:flex;position:fixed;bottom:18px;right:20px;gap:8px;z-index:50;align-items:center;}
+  .controls button{width:42px;height:42px;border-radius:50%;border:1px solid var(--card-line);
+     background:rgba(20,23,25,0.8);color:#fff;font-size:1.1rem;cursor:pointer;backdrop-filter:blur(6px);}
+  .controls button:hover{border-color:var(--green);}
+  #counter{font-size:.82rem;color:var(--muted);min-width:54px;text-align:center;}
+  .progress{display:none;}
+  body.js-on .progress{display:block;position:fixed;left:0;top:0;height:3px;background:var(--green);width:8%;z-index:60;transition:width .35s ease;}
+  .hint{display:none;}
+  body.js-on .hint{display:block;position:fixed;bottom:20px;left:20px;color:var(--muted);font-size:.74rem;z-index:50;}
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1. Title -->
+  <section class="slide bg-hero center">
+    <svg class="logo-big" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="2.5"/>
+      <polygon points="30,14 44,22 44,38 30,46 16,38 16,22" fill="#7ab536" opacity="0.25"/>
+      <polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536" opacity="0.55"/>
+      <polygon points="30,26 36,30 36,38 30,42 24,38 24,30" fill="#7ab536"/>
+    </svg>
+    <h1>My QTS Journey</h1>
+    <div class="dates">2025 - 2026</div>
+    <div class="who"><b>Tyrone Bellamy-Wood</b><br>Computer Science, Years 7 to 12 &nbsp;|&nbsp; Nova Torch SCITT</div>
+  </section>
+
+  <!-- 2. Context -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Where I have been</span></div>
+    <h2>Context</h2>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">Subject and range:</span> Computer Science across Years 7 to 12, from KS3 foundations through to the KS5 OCR H446 specification.</li>
+        <li><span class="hl">Setting:</span> The Garibaldi School, including KS5 transition work towards Melton Vale (MV16).</li>
+        <li><span class="hl">The shift this year:</span> from enthusiastic, content-rich delivery to deliberate, evidence-led teaching, shaped by observation feedback and live pupil data.</li>
+      </ul>
+      <div class="note"><b>How to read this deck:</b> Part One covers Standards 1 to 8, one slide each, and Part Two covers professional conduct. Each slide shows where I started, what I changed, and the impact, with three pieces of evidence.</div>
+    </div>
+  </section>
+
+  <!-- 3. Standard 1 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 1</span></div>
+    <h2>Set High Expectations</h2>
+    <div class="descriptor">Set high expectations which inspire, motivate and challenge pupils.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">Started:</span> I leant on rapport and enthusiasm, and learnt that high expectations have to be explicit and visible, not assumed.</li>
+        <li><span class="hl">Changed:</span> silent starts with screens locked, clear "do now" code-debugging routines, and genuine stretch tasks for high attainers.</li>
+        <li><span class="hl">Beyond the timetable:</span> I run a 3D Animation (Blender) club and a Morning Hub, so quieter pupils now arrive early to code.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/Enrichment_blender_evidence.png" target="_blank"><img src="media_evidence/Enrichment_blender_evidence.png" alt="Blender enrichment club"></a>
+        <a href="media_evidence/DLDCycle19_Lesson_Hard1.png" target="_blank"><img src="media_evidence/DLDCycle19_Lesson_Hard1.png" alt="Stretch for high attainers"></a>
+        <a href="media_evidence/DLDCycle20_Lesson_Hats.png" target="_blank"><img src="media_evidence/DLDCycle20_Lesson_Hats.png" alt="Engaging challenge activity"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Standard 2 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 2</span></div>
+    <h2>Promote Good Progress</h2>
+    <div class="descriptor">Promote good progress and outcomes by pupils. (Overlaps with the Learning Process and Assessment strands.)</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">Started:</span> I talked about pupils making progress without much hard evidence behind it.</li>
+        <li><span class="hl">Changed:</span> every pupil response is captured and marked in Classfolio. I moderate the marks, then set targets directly from the data.</li>
+        <li><span class="hl">Impact:</span> 26 moderated assessment runs across 20 classes, plus nine Year 12 mocks marked against the mark scheme with the class teacher.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/marking_evidence3.png" target="_blank"><img src="media_evidence/marking_evidence3.png" alt="Classfolio results and moderation"></a>
+        <a href="media_evidence/marking_evidence1.png" target="_blank"><img src="media_evidence/marking_evidence1.png" alt="Per-pupil data and targets"></a>
+        <a href="media_evidence/MarkingEvidenceLog_Year12_13042026.docx" target="_blank" class="doc-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#7ab536" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Year 12 marking log</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Standard 3 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 3</span></div>
+    <h2>Subject and Curriculum Knowledge</h2>
+    <div class="descriptor">Demonstrate good subject and curriculum knowledge.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">KS5 confidence:</span> self-studied the OCR H446 specification and object-oriented programming in Python to deliver sixth-form content securely.</li>
+        <li><span class="hl">Bespoke resources:</span> designed interactive, self-coded webpages to teach hard concepts such as pathfinding algorithms.</li>
+        <li><span class="hl">Subject CPD:</span> completed STEM Learning modules on Von Neumann architecture, networks and cyber security.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/yr12_workshop_evidence.png" target="_blank"><img src="media_evidence/yr12_workshop_evidence.png" alt="KS5 pathfinding resource"></a>
+        <a href="media_evidence/OCR_spec_revision.png" target="_blank"><img src="media_evidence/OCR_spec_revision.png" alt="OCR H446 specification revision"></a>
+        <a href="media_evidence/Stem_learning.png" target="_blank"><img src="media_evidence/Stem_learning.png" alt="STEM Learning CPD"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Standard 4 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 4</span></div>
+    <h2>Plan and Teach Well-Structured Lessons</h2>
+    <div class="descriptor">Plan and teach well structured lessons.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">Structured for learning:</span> moved to PRIMM and Rosenshine small steps with clear modelling, "I do, We do, You do".</li>
+        <li><span class="hl">Time used well:</span> planned deliberate transitions and checkpoints so lesson time is not lost.</li>
+        <li><span class="hl">Reflective:</span> acted on observations of my modelling to sharpen explanations of new and unfamiliar content.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/DLDCycle21_LP_transition.png" target="_blank"><img src="media_evidence/DLDCycle21_LP_transition.png" alt="Transition planning"></a>
+        <a href="media_evidence/DLDCycle19_FB_model.png" target="_blank"><img src="media_evidence/DLDCycle19_FB_model.png" alt="Modelling observation feedback"></a>
+        <a href="media_evidence/DLDCycle10_LP_hinge.png" target="_blank"><img src="media_evidence/DLDCycle10_LP_hinge.png" alt="Hinge question plan"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Standard 5 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 5</span></div>
+    <h2>Adapt Teaching</h2>
+    <div class="descriptor">Adapt teaching to respond to the strengths and needs of all pupils.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">Planned, not improvised:</span> I keep a per-class inclusive planning grid mapping each pupil's SEND or EAL need to specific strategies.</li>
+        <li><span class="hl">EAL access:</span> built a bilingual Farsi and English interactive assessment so a new-arrival pupil could access the same content.</li>
+        <li><span class="hl">Scaffold, never water down:</span> rebuilt a lesson structurally for a lower band rather than reducing the content.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/inclusion_planning_evidence.png" target="_blank"><img src="media_evidence/inclusion_planning_evidence.png" alt="Whole-class inclusive planning grid"></a>
+        <a href="media_evidence/EAL_EvidenceforAssessment.png" target="_blank"><img src="media_evidence/EAL_EvidenceforAssessment.png" alt="Bilingual Farsi and English assessment"></a>
+        <a href="media_evidence/DLDCycle18_LP_differentiation.png" target="_blank"><img src="media_evidence/DLDCycle18_LP_differentiation.png" alt="A and B band differentiation"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Standard 6 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 6</span></div>
+    <h2>Make Accurate Use of Assessment</h2>
+    <div class="descriptor">Make accurate and productive use of assessment.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">The 80% rule:</span> a hard gate on live Classfolio data. If fewer than 80% answer correctly, I reteach rather than move on.</li>
+        <li><span class="hl">Surfacing gaps:</span> hinge questions and targeted cold-calling to find misconceptions early, not at the end.</li>
+        <li><span class="hl">Low-stakes retrieval:</span> gamified plenaries to check what has actually stuck.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/DLDCycle22_Lesson_80pc.png" target="_blank"><img src="media_evidence/DLDCycle22_Lesson_80pc.png" alt="Live AfL 80 percent data"></a>
+        <a href="media_evidence/DLDCycle17_FB_questioning.png" target="_blank"><img src="media_evidence/DLDCycle17_FB_questioning.png" alt="Questioning observation feedback"></a>
+        <a href="media_evidence/Gamified_plenary.png" target="_blank"><img src="media_evidence/Gamified_plenary.png" alt="Gamified retrieval plenary"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Standard 7 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 7</span></div>
+    <h2>Manage Behaviour</h2>
+    <div class="descriptor">Manage behaviour effectively to ensure a good and safe learning environment.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">My honest development area:</span> observers repeatedly flagged that I relied on rapport and applied consequences too late.</li>
+        <li><span class="hl">What I changed:</span> built clear routines, visual timers and firm cut-offs, and now use the C1 and C2 system consistently and early.</li>
+        <li><span class="hl">The lesson:</span> consistent consequences protect positive relationships rather than damage them.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/DLDCycle22_FB_Consequences.png" target="_blank"><img src="media_evidence/DLDCycle22_FB_Consequences.png" alt="Observation feedback on consequences"></a>
+        <a href="media_evidence/DLDCycle19_Lesson_Timer.jpeg" target="_blank"><img src="media_evidence/DLDCycle19_Lesson_Timer.jpeg" alt="Visual timers and cut-offs"></a>
+        <a href="media_evidence/DLDCycle12_FB_turnfaceboard.png" target="_blank"><img src="media_evidence/DLDCycle12_FB_turnfaceboard.png" alt="Consistent classroom management"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Standard 8 -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part One - Standard 8</span></div>
+    <h2>Wider Professional Responsibilities</h2>
+    <div class="descriptor">Fulfil wider professional responsibilities.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">Parent communication:</span> trusted with the majority of Year 7 and Year 8 appointments, I built a data lookup tool to give parents precise, evidence-based feedback.</li>
+        <li><span class="hl">Collaboration:</span> built department-wide Canva and PhotoPea resources with my mentor.</li>
+        <li><span class="hl">Professional engagement:</span> engaged with KS5 transition at Melton Vale and contributed to PSHE and Unifrog.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/parents_evening_evidence.png" target="_blank"><img src="media_evidence/parents_evening_evidence.png" alt="Parents evening lookup tool"></a>
+        <a href="media_evidence/Resource_creation_evidence1.png" target="_blank"><img src="media_evidence/Resource_creation_evidence1.png" alt="Department resource creation"></a>
+        <a href="media_evidence/MeltonVale_notes.png" target="_blank"><img src="media_evidence/MeltonVale_notes.png" alt="Melton Vale KS5 transition"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Part Two -->
+  <section class="slide bg-dark">
+    <div class="eyebrow"><svg viewBox="0 0 60 60"><polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="3"/><polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536"/></svg><span>Part Two</span></div>
+    <h2>Personal and Professional Conduct</h2>
+    <div class="descriptor">Uphold public trust and high standards of ethics, safeguarding and professional conduct.</div>
+    <div class="glass">
+      <ul>
+        <li><span class="hl">Safeguarding:</span> completed statutory training including Prevent (Channel, Referrals and Awareness), FGM, and Health and Safety.</li>
+        <li><span class="hl">Reflective practice:</span> logged professional development consistently across every DLD cycle, responding to feedback throughout.</li>
+        <li><span class="hl">British values and wellbeing:</span> promoted these through PSHE and Unifrog, working within school policies and statutory frameworks.</li>
+      </ul>
+      <div class="ev-title">Evidence</div>
+      <div class="gallery">
+        <a href="media_evidence/EvidenceofCPDCertificates.png" target="_blank"><img src="media_evidence/EvidenceofCPDCertificates.png" alt="Safeguarding CPD certificates"></a>
+        <a href="media_evidence/AllDLD_Snapshot1.png" target="_blank"><img src="media_evidence/AllDLD_Snapshot1.png" alt="Reflective DLD log"></a>
+        <a href="media_evidence/PDPSHE_unifrog.png" target="_blank"><img src="media_evidence/PDPSHE_unifrog.png" alt="PSHE and Unifrog"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Close -->
+  <section class="slide bg-close center">
+    <svg class="logo-big" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,4 52,17 52,43 30,56 8,43 8,17" fill="none" stroke="#7ab536" stroke-width="2.5"/>
+      <polygon points="30,14 44,22 44,38 30,46 16,38 16,22" fill="#7ab536" opacity="0.25"/>
+      <polygon points="30,20 40,26 40,38 30,44 20,38 20,26" fill="#7ab536" opacity="0.55"/>
+      <polygon points="30,26 36,30 36,38 30,42 24,38 24,30" fill="#7ab536"/>
+    </svg>
+    <h1>Thank You</h1>
+    <div class="dates" style="letter-spacing:.12em">Reflective, coachable, and ready for the ECT years.</div>
+    <div class="who"><b>Tyrone Bellamy-Wood</b> &nbsp;|&nbsp; Nova Torch SCITT</div>
+  </section>
+
+</div>
+
+<div class="controls">
+  <button id="prev" aria-label="Previous">&#8249;</button>
+  <span id="counter">1 / 12</span>
+  <button id="next" aria-label="Next">&#8250;</button>
+</div>
+<div class="hint">Arrow keys or click to navigate</div>
+
+<script>
+  (function(){
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var i = 0, bar = document.getElementById('bar'), counter = document.getElementById('counter');
+    document.body.classList.add('js-on');
+    function show(n){
+      i = Math.max(0, Math.min(slides.length-1, n));
+      slides.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+      if(counter) counter.textContent = (i+1)+' / '+slides.length;
+      if(bar) bar.style.width = ((i+1)/slides.length*100)+'%';
+      try{ history.replaceState(null,'', '#'+(i+1)); }catch(e){}
+    }
+    document.addEventListener('keydown', function(e){
+      if(['ArrowRight','PageDown',' '].indexOf(e.key)>-1){ show(i+1); e.preventDefault(); }
+      else if(['ArrowLeft','PageUp'].indexOf(e.key)>-1){ show(i-1); e.preventDefault(); }
+      else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
+    });
+    var prev=document.getElementById('prev'), next=document.getElementById('next');
+    if(prev) prev.onclick=function(){ show(i-1); };
+    if(next) next.onclick=function(){ show(i+1); };
+    document.getElementById('deck').addEventListener('click', function(e){
+      if(e.target.closest('a')) return;
+      if(e.clientX > window.innerWidth*0.5) show(i+1); else show(i-1);
+    });
+    Array.prototype.slice.call(document.querySelectorAll('.gallery img')).forEach(function(img){
+      img.onerror = function(){ var a=img.closest('a'); if(a) a.style.display='none'; };
+    });
+    var start = parseInt((location.hash||'').replace('#',''),10);
+    show(isNaN(start)?0:start-1);
+  })();
+</script>
+</body>
+</html>
